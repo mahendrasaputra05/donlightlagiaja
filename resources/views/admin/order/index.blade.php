@@ -18,17 +18,15 @@
         <td>Rp {{ number_format($order->total) }}</td>
         <td>{{ $order->status }}</td>
         <td>
-            @if($order->status === 'pending')
-                <form method="POST" action="{{ route('admin.order.updateStatus', $order->id) }}">
-                    @csrf
-                    <button type="submit">Selesaikan</button>
-                </form>
-            @else
-                ✔ Selesai
+            @if($order->status == 'pending')
+            <form method="POST" action="{{ route('admin.order.status', $order->id) }}">
+                @csrf
+                <button type="submit">Selesaikan</button>
+            </form>
             @endif
         </td>
     </tr>
     @endforeach
 </table>
 
-<a href="{{ route('admin.dashboard') }}">← Kembali ke Dashboard</a>
+<a href="{{ route('admin.dashboard') }}">⬅ Kembali</a>

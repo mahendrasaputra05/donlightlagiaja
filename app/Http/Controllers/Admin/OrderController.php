@@ -8,12 +8,14 @@ use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
+    // tampilkan semua order
     public function index()
     {
         $orders = Transaksi::with('user')->latest()->get();
         return view('admin.order.index', compact('orders'));
     }
 
+    // update status order
     public function updateStatus($id)
     {
         $order = Transaksi::findOrFail($id);
