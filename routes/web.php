@@ -28,11 +28,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::resource('/produk', ProdukController::class);
 
+    // ✅ ADMIN ORDER
     Route::get('/order', [AdminOrderController::class, 'index'])
         ->name('order.index');
 
-    Route::post('/order/{id}/status', [AdminOrderController::class, 'updateStatus'])
-        ->name('order.updateStatus');
+    Route::post('/order/{order}/status', [AdminOrderController::class, 'updateStatus'])
+        ->name('order.status');
 });
 
 /*
