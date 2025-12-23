@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProdukController;
-use App\Http\Controllers\Customer\OrderController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,11 +21,16 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+
     Route::get('/dashboard', function () {
         return view('admin.dashboard');
     })->name('dashboard');
 
-    Route::resource('produk', ProdukController::class);
+    Route::get('/order', [AdminOrderController::class, 'index'])
+        ->name('order.index');
+
+    Route::post('/order/{id}/status', [AdminOrderController::class, 'updateStatus'])
+        ->name('order.updateStatus');
 });
 
 /*

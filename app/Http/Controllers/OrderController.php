@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Customer;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Produk;
 use App\Models\Transaksi;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
@@ -18,8 +17,13 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
+        $request->validate([
+            'produk_id' => 'required|exists:produks,id',
+            'qty' => 'required|integer|min:1',
+        ]);
+
         $produk = Produk::findOrFail($request->produk_id);
-        $total = $produk->harga * $request->qty;
+        $total  = $produk->harga * $request->qty;
 
         Transaksi::create([
             'user_id' => Auth::id(),
