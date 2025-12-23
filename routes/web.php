@@ -42,6 +42,12 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 |--------------------------------------------------------------------------
 */
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
+
+    // ✅ DASHBOARD CUSTOMER
+    Route::get('/dashboard', function () {
+        return view('customer.dashboard');
+    })->name('dashboard');
+
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
     Route::post('/order', [OrderController::class, 'store'])->name('order.store');
 });

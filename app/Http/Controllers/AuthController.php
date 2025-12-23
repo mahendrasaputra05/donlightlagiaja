@@ -24,7 +24,7 @@ class AuthController extends Controller
         }
 
         if ($user->role === 'customer') {
-            return redirect()->route('customer.order.index');
+            return redirect()->route('customer.dashboard');
         }
 
         Auth::logout();
