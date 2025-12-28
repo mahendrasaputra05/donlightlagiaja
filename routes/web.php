@@ -5,20 +5,25 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\Admin\ProdukController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Customer\ProdukController as CustomerProdukController;
 
 /*
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 | AUTH
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 */
 Route::get('/login', [AuthController::class, 'show'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 /*
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 | ADMIN
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 */
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
 
@@ -28,7 +33,6 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::resource('/produk', ProdukController::class);
 
-    // ✅ ADMIN ORDER
     Route::get('/order', [AdminOrderController::class, 'index'])
         ->name('order.index');
 
@@ -37,17 +41,26 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 });
 
 /*
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 | CUSTOMER
-|--------------------------------------------------------------------------
+|--------------------------------------------------------------------------|
 */
 Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(function () {
 
-    // ✅ DASHBOARD CUSTOMER
+    // DASHBOARD
     Route::get('/dashboard', function () {
         return view('customer.dashboard');
     })->name('dashboard');
 
-    Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-    Route::post('/order', [OrderController::class, 'store'])->name('order.store');
+    // PRODUCTS
+    Route::get('/products', [CustomerProdukController::class, 'index'])
+        ->name('products');
+
+    // CART
+    Route::get('/cart', [OrderController::class, 'cart'])->name('cart');
+    Route::post('/cart/add', [OrderController::class, 'addToCart'])->name('cart.add');
+    Route::post('/cart/remove/{id}', [OrderController::class, 'removeFromCart'])->name('cart.remove');
+
+    // CHECKOUT
+    Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
 });

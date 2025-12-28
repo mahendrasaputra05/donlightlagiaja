@@ -1,18 +1,17 @@
 <h1>Tambah Produk</h1>
 
-<form method="POST" action="{{ route('admin.produk.store') }}">
+<form action="{{ route('admin.produk.store') }}" method="POST">
     @csrf
 
-    <p>Nama Produk</p>
-    <input type="text" name="nama_produk">
+    <label>Nama Produk</label><br>
+    <input type="text" name="nama_produk"><br><br>
 
-    <p>Harga</p>
-    <input type="number" name="harga">
+    <label>Harga</label><br>
+    <input type="number" name="harga"><br><br>
 
-    <p>Stok</p>
-    <input type="number" name="stok">
+    <label>Stok</label><br>
+    <input type="number" name="stok"><br><br>
 
-    <br><br>
     <button type="submit">Simpan</button>
 </form>
 

@@ -3,27 +3,32 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaksi;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
 {
-    // tampilkan semua order
+    // LIST ORDER
     public function index()
     {
-        $orders = Transaksi::with('user')->latest()->get();
+        $orders = Order::with(['items', 'user'])
+            ->latest()
+            ->get();
+
         return view('admin.order.index', compact('orders'));
     }
 
-    // update status order
-    public function updateStatus($id)
+    // UPDATE STATUS
+    public function updateStatus(Request $request, Order $order)
     {
-        $order = Transaksi::findOrFail($id);
-        $order->status = 'selesai';
-        $order->save();
+        $request->validate([
+            'status' => 'required|in:pending,diproses,selesai'
+        ]);
 
-        return redirect()
-            ->route('admin.order.index')
-            ->with('success', 'Order berhasil diselesaikan');
+        $order->update([
+            'status' => $request->status
+        ]);
+
+        return back()->with('success', 'Status order berhasil diperbarui');
     }
 }

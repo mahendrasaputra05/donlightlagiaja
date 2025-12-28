@@ -1,26 +1,60 @@
-@extends('layouts.main')
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Donlight</title>
 
-@section('title', 'Produk')
+    {{-- Icons --}}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 
-@section('content')
-<h1 class="text-2xl font-bold mb-4">Daftar Produk</h1>
+    @vite('resources/css/app.css')
+</head>
+<body class="bg-[#F7FBFF]">
 
-<table class="w-full bg-white rounded shadow">
-    <thead class="bg-gray-200">
-        <tr>
-            <th class="p-2 text-left">Nama</th>
-            <th class="p-2">Harga</th>
-            <th class="p-2">Stok</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach($produks as $produk)
-        <tr class="border-t">
-            <td class="p-2">{{ $produk->nama_produk }}</td>
-            <td class="p-2 text-center">Rp {{ number_format($produk->harga) }}</td>
-            <td class="p-2 text-center">{{ $produk->stok }}</td>
-        </tr>
-        @endforeach
-    </tbody>
-</table>
-@endsection
+{{-- NAVBAR --}}
+<nav class="bg-white px-10 py-4 flex justify-between items-center shadow-sm">
+    {{-- LOGO --}}
+    <div class="flex items-center gap-3 font-bold text-xl">
+        <img src="{{ asset('logo.png') }}" class="w-9 h-9" alt="logo">
+        Donlight
+    </div>
+
+    {{-- NAV ICONS --}}
+    <div class="flex items-center gap-6 text-xl text-gray-700">
+
+        {{-- HOME --}}
+        <a href="{{ route('customer.dashboard') }}"
+           class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal-400 to-blue-500 text-white text-base">
+            <i class="bi bi-house"></i>
+            Home
+        </a>
+
+        {{-- ORDER --}}
+        <i class="bi bi-receipt cursor-pointer"></i>
+
+        {{-- CART --}}
+        <a href="{{ route('customer.cart') }}">
+            <i class="bi bi-cart"></i>
+        </a>
+
+        {{-- LOCATION --}}
+        <i class="bi bi-geo-alt cursor-pointer"></i>
+
+        {{-- PROFILE --}}
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">
+                <i class="bi bi-person cursor-pointer"></i>
+            </button>
+        </form>
+
+    </div>
+</nav>
+
+{{-- CONTENT --}}
+<main class="px-10 py-8">
+    @yield('content')
+</main>
+
+</body>
+</html>
