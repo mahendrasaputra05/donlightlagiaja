@@ -31,4 +31,11 @@ class OrderController extends Controller
 
         return back()->with('success', 'Status order berhasil diperbarui');
     }
+
+    public function show(Order $order)
+{
+    $order->load('items', 'user');
+    return view('admin.order.show', compact('order'));
+}
+
 }

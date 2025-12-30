@@ -20,15 +20,18 @@
     </thead>
     <tbody>
         @forelse($orders as $order)
-        <tr class="border-t">
+        <tr class="border-t align-top">
+            {{-- USER --}}
             <td class="p-3">
                 {{ $order->user->name ?? '-' }}
             </td>
 
+            {{-- TOTAL --}}
             <td class="p-3 text-pink-500 font-semibold">
                 Rp {{ number_format($order->total_price) }}
             </td>
 
+            {{-- STATUS --}}
             <td class="p-3">
                 <span class="px-3 py-1 rounded-full text-sm
                     {{ $order->status == 'pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
@@ -39,19 +42,37 @@
                 </span>
             </td>
 
+            {{-- AKSI --}}
             <td class="p-3">
-                <form method="POST" action="{{ route('admin.order.status', $order) }}" class="flex gap-2">
-                    @csrf
-                    <select name="status" class="border rounded px-2 py-1 text-sm">
-                        <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>Pending</option>
-                        <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>Diproses</option>
-                        <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>Selesai</option>
-                    </select>
+                <div class="flex flex-col gap-2">
 
-                    <button class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-sm">
-                        Update
-                    </button>
-                </form>
+                    {{-- DETAIL BUTTON --}}
+                    <a href="{{ route('admin.order.show', $order) }}"
+                       class="text-center bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded text-sm">
+                        Detail
+                    </a>
+
+                    {{-- UPDATE STATUS --}}
+                    <form method="POST" action="{{ route('admin.order.status', $order) }}" class="flex gap-2">
+                        @csrf
+                        <select name="status" class="border rounded px-2 py-1 text-sm">
+                            <option value="pending" {{ $order->status == 'pending' ? 'selected' : '' }}>
+                                Pending
+                            </option>
+                            <option value="diproses" {{ $order->status == 'diproses' ? 'selected' : '' }}>
+                                Diproses
+                            </option>
+                            <option value="selesai" {{ $order->status == 'selesai' ? 'selected' : '' }}>
+                                Selesai
+                            </option>
+                        </select>
+
+                        <button class="bg-pink-500 hover:bg-pink-600 text-white px-3 py-1 rounded text-sm">
+                            Update
+                        </button>
+                    </form>
+
+                </div>
             </td>
         </tr>
         @empty

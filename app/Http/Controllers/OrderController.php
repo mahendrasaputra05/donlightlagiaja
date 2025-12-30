@@ -6,13 +6,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Produk;
 
 class OrderController extends Controller
 {
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | CART PAGE
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     */
     public function cart()
     {
@@ -27,14 +28,14 @@ class OrderController extends Controller
     }
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | ADD TO CART
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     */
     public function addToCart(Request $request)
     {
         $request->validate([
-            'id'    => 'required',
+            'id'    => 'required|exists:produks,id',
             'name'  => 'required',
             'price' => 'required|numeric',
         ]);
@@ -46,6 +47,7 @@ class OrderController extends Controller
             $cart[$id]['qty']++;
         } else {
             $cart[$id] = [
+                'id'    => $id,
                 'name'  => $request->name,
                 'price' => $request->price,
                 'qty'   => 1,
@@ -56,13 +58,13 @@ class OrderController extends Controller
 
         return redirect()
             ->route('customer.cart')
-            ->with('success', 'Produk ditambahkan ke cart');
+            ->with('success', 'Produk ditambahkan ke keranjang');
     }
 
     /*
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     | REMOVE ITEM FROM CART
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
     */
     public function removeFromCart($id)
     {
@@ -73,51 +75,97 @@ class OrderController extends Controller
             session()->put('cart', $cart);
         }
 
-        return back();
+        return back()->with('success', 'Produk dihapus dari keranjang');
     }
 
     /*
-    |----------------------------------------------------------------------
-    | CHECKOUT (SAVE TO DATABASE)
-    |----------------------------------------------------------------------
+    |--------------------------------------------------------------------------
+    | CHECKOUT
+    |--------------------------------------------------------------------------
     */
     public function checkout()
     {
         $cart = session()->get('cart', []);
 
-        // Jika cart kosong
         if (empty($cart)) {
-            return redirect()->route('customer.dashboard');
+            return redirect()->route('customer.products')
+                ->with('error', 'Keranjang masih kosong');
         }
 
-        // Hitung total
         $total = 0;
+
+        // CEK STOK
         foreach ($cart as $item) {
+            $produk = Produk::find($item['id']);
+
+            if (!$produk || $produk->stok < $item['qty']) {
+                return back()->with(
+                    'error',
+                    'Stok produk "' . ($produk->nama_produk ?? '') . '" tidak mencukupi'
+                );
+            }
+
             $total += $item['price'] * $item['qty'];
         }
 
-        // Simpan order
+        // SIMPAN ORDER
         $order = Order::create([
             'user_id'      => Auth::id(),
             'total_price' => $total,
             'status'      => 'pending',
         ]);
 
-        // Simpan order items
+        // SIMPAN ITEM + KURANGI STOK
         foreach ($cart as $item) {
+            $produk = Produk::find($item['id']);
+
             OrderItem::create([
                 'order_id'     => $order->id,
-                'product_name' => $item['name'],
+                'produk_id'    => $produk->id,
+                'product_name' => $produk->nama_produk,
                 'price'        => $item['price'],
                 'qty'          => $item['qty'],
             ]);
+
+            // 🔥 KURANGI STOK
+            $produk->decrement('stok', $item['qty']);
         }
 
-        // Kosongkan cart
         session()->forget('cart');
 
-        return redirect()
-            ->route('customer.dashboard')
-            ->with('success', 'Order berhasil dibuat!');
+        return redirect()->route('customer.dashboard')
+            ->with('success', 'Order berhasil dibuat');
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | RIWAYAT ORDER CUSTOMER
+    |--------------------------------------------------------------------------
+    */
+    public function myOrders()
+    {
+        $orders = Order::with('items')
+            ->where('user_id', Auth::id())
+            ->latest()
+            ->get();
+
+        return view('customer.orders', compact('orders'));
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | DETAIL ORDER CUSTOMER
+    |--------------------------------------------------------------------------
+    */
+    public function orderDetail(Order $order)
+    {
+        // 🔐 SECURITY: hanya owner order
+        if ($order->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $order->load('items');
+
+        return view('customer.order-detail', compact('order'));
     }
 }

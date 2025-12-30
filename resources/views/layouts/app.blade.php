@@ -24,26 +24,29 @@
 
         {{-- HOME --}}
         <a href="{{ route('customer.dashboard') }}"
-           class="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal-400 to-blue-500 text-white text-base">
-            <i class="bi bi-house"></i>
-            Home
+           class="flex items-center gap-2 px-5 py-2 rounded-full
+           bg-gradient-to-r from-teal-400 to-blue-500 text-white">
+            <i class="bi bi-house text-base"></i>
+            <span class="text-sm font-medium">Home</span>
         </a>
 
         {{-- ORDER --}}
-        <i class="bi bi-receipt cursor-pointer"></i>
+        <a href="{{ route('customer.orders') }}" class="text-gray-800">
+            <i class="bi bi-receipt text-lg"></i>
+        </a>
 
         {{-- CART --}}
-        <a href="{{ route('customer.cart') }}">
+        <a href="{{ route('customer.cart') }}" class="text-gray-800">
             <i class="bi bi-cart"></i>
         </a>
 
         {{-- LOCATION --}}
-        <i class="bi bi-geo-alt cursor-pointer"></i>
+        <a href="{{ route('customer.cart') }}" class="text-gray-800">
 
         {{-- PROFILE --}}
         <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit">
+            <button type="submit" class ="text-gray-800">
                 <i class="bi bi-person cursor-pointer"></i>
             </button>
         </form>
@@ -53,8 +56,9 @@
 
 {{-- CONTENT --}}
 <main class="px-10 py-8">
-    @yield('content')
+    @yield('content') 
 </main>
 
+@include('layouts.footer')
 </body>
 </html>

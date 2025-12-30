@@ -8,24 +8,26 @@ use Illuminate\Http\Request;
 
 class ProdukController extends Controller
 {
+    // TAMPILKAN LIST PRODUK
     public function index()
     {
         $produks = Produk::all();
         return view('admin.produk.index', compact('produks'));
     }
 
+    // FORM TAMBAH PRODUK
     public function create()
     {
         return view('admin.produk.create');
     }
 
+    // SIMPAN PRODUK BARU
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required|integer',
-            'description' => 'nullable',
-            'image' => 'nullable',
+            'nama_produk' => 'required|string',
+            'harga'       => 'required|integer',
+            'stok'        => 'required|integer',
         ]);
 
         Produk::create([
@@ -33,30 +35,37 @@ class ProdukController extends Controller
             'harga'       => $request->harga,
             'stok'        => $request->stok,
         ]);
+
         return redirect()->route('admin.produk.index')
             ->with('success', 'Produk berhasil ditambahkan');
     }
 
+    // FORM EDIT PRODUK
     public function edit(Produk $produk)
     {
         return view('admin.produk.edit', compact('produk'));
     }
 
+    // UPDATE PRODUK
     public function update(Request $request, Produk $produk)
     {
         $request->validate([
-            'name' => 'required',
-            'price' => 'required|integer',
-            'description' => 'nullable',
-            'image' => 'nullable',
+            'nama_produk' => 'required|string',
+            'harga'       => 'required|integer',
+            'stok'        => 'required|integer',
         ]);
 
-        $produk->update($request->all());
+        $produk->update([
+            'nama_produk' => $request->nama_produk,
+            'harga'       => $request->harga,
+            'stok'        => $request->stok,
+        ]);
 
         return redirect()->route('admin.produk.index')
             ->with('success', 'Produk berhasil diupdate');
     }
 
+    // HAPUS PRODUK
     public function destroy(Produk $produk)
     {
         $produk->delete();

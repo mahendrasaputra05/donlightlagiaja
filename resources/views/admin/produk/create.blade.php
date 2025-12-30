@@ -4,15 +4,16 @@
     @csrf
 
     <label>Nama Produk</label><br>
-    <input type="text" name="nama_produk"><br><br>
+    <input type="text" name="nama_produk" required><br><br>
 
     <label>Harga</label><br>
-    <input type="number" name="harga"><br><br>
+    <input type="number" name="harga" required><br><br>
 
     <label>Stok</label><br>
-    <input type="number" name="stok"><br><br>
+    <input type="number" name="stok" required><br><br>
 
     <button type="submit">Simpan</button>
 </form>
 
+<br>
 <a href="{{ route('admin.produk.index') }}">Kembali</a>

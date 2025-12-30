@@ -38,6 +38,10 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
 
     Route::post('/order/{order}/status', [AdminOrderController::class, 'updateStatus'])
         ->name('order.status');
+
+    Route::get('/order/{order}', [AdminOrderController::class, 'show'])
+    ->name('order.show');
+
 });
 
 /*
@@ -63,4 +67,12 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
 
     // CHECKOUT
     Route::post('/checkout', [OrderController::class, 'checkout'])->name('checkout');
+
+    Route::get('/orders', [OrderController::class, 'myOrders'])
+        ->name('orders');
+
+    Route::get('/orders', [OrderController::class, 'myOrders'])->name('orders');
+    Route::get('/orders/{order}', [OrderController::class, 'orderDetail'])->name('orders.show');
+
+
 });

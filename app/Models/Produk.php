@@ -9,8 +9,10 @@ class Produk extends Model
 {
     use HasFactory;
 
-    protected $table = 'produks'; 
+    // NAMA TABEL (pastikan di DB memang 'produuks')
+    protected $table = 'produks';
 
+    // FIELD YANG BOLEH DI-INSERT
     protected $fillable = [
         'nama_produk',
         'harga',
