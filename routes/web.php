@@ -47,6 +47,8 @@ Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () 
     Route::get('/order/{order}', [AdminOrderController::class, 'show'])
     ->name('order.show');
 
+
+
 });
 
 /*
@@ -80,4 +82,8 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
     Route::get('/orders/{order}', [OrderController::class, 'orderDetail'])->name('orders.show');
 
 
+});
+
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class);
 });

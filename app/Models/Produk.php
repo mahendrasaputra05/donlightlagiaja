@@ -7,12 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
     use HasFactory;
 
-    // NAMA TABEL (pastikan di DB memang 'produuks')
     protected $table = 'produks';
 
-    // FIELD YANG BOLEH DI-INSERT
+    
     protected $fillable = [
         'nama_produk',
         'harga',
