@@ -15,7 +15,7 @@
                 <span class="font-bold text-lg">Donlight</span>
             </div>
 
-            <div class="flex items-center gap-6">
+            <div class="ml-auto flex items-center gap-6">
                 <i class="bi bi-house text-xl"></i>
                 <i class="bi bi-receipt text-xl"></i>
                 <i class="bi bi-cart text-xl"></i>

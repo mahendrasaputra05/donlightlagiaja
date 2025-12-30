@@ -7,6 +7,11 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Customer\ProdukController as CustomerProdukController;
 
+
+Route::get('/dashboard', function () {
+    return redirect('customer.dashboard');
+});
+
 /*
 |--------------------------------------------------------------------------|
 | AUTH

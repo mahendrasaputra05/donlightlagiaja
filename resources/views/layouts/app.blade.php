@@ -20,7 +20,7 @@
     </div>
 
     {{-- NAV ICONS --}}
-    <div class="flex items-center gap-6 text-xl text-gray-700">
+    <div class="ml-auto flex items-center gap-6 text-xl text-gray-700">
 
         {{-- HOME --}}
         <a href="{{ route('customer.dashboard') }}"
