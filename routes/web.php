@@ -87,3 +87,15 @@ Route::middleware(['auth'])->prefix('customer')->name('customer.')->group(functi
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
         Route::resource('kategori', \App\Http\Controllers\Admin\KategoriController::class);
 });
+
+
+Route::middleware(['auth', 'role:admin,owner'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('customer', \App\Http\Controllers\Admin\CustomerController::class);
+});
+
+Route::middleware(['auth', 'role:owner,admin'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('user', \App\Http\Controllers\Admin\UserController::class);
+    });

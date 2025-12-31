@@ -1,19 +1,27 @@
-<h1>Tambah Produk</h1>
+@extends('layouts.app')
+
+@section('content')
+<h1 class="text-2xl font-bold mb-6">Tambah Produk</h1>
 
 <form action="{{ route('admin.produk.store') }}" method="POST">
     @csrf
 
-    <label>Nama Produk</label><br>
-    <input type="text" name="nama_produk" required><br><br>
+    <label>Nama Produk</label>
+    <input type="text" name="nama_produk" required>
 
-    <label>Harga</label><br>
-    <input type="number" name="harga" required><br><br>
+    <label>Kategori</label>
+    <select name="kategori_id" required>
+        <option value="">-- Pilih Kategori --</option>
+        @foreach($kategoris as $kategori)
+            <option value="{{ $kategori->id }}">{{ $kategori->nama }}</option>
+        @endforeach
+    </select>
 
-    <label>Stok</label><br>
-    <input type="number" name="stok" required><br><br>
+    <label>Harga</label>
+    <input type="number" name="harga" required>
+
+    <label>Stok</label>
+    <input type="number" name="stok" required>
 
     <button type="submit">Simpan</button>
 </form>
-
-<br>
-<a href="{{ route('admin.produk.index') }}">Kembali</a>

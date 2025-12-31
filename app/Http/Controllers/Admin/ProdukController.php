@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Produk;
 use Illuminate\Http\Request;
+use App\Models\Kategori;
+
 
 class ProdukController extends Controller
 {
@@ -18,20 +20,23 @@ class ProdukController extends Controller
     // FORM TAMBAH PRODUK
     public function create()
     {
-        return view('admin.produk.create');
+        $kategoris = Kategori::all();
+        return view('admin.produk.create', compact('kategoris'));
     }
 
     // SIMPAN PRODUK BARU
     public function store(Request $request)
     {
         $request->validate([
-            'nama_produk' => 'required|string',
-            'harga'       => 'required|integer',
+            'nama_produk' => 'required',
+            'kategori_id' => 'required|exists:kategoris,id',
+            'harga'       => 'required|numeric',
             'stok'        => 'required|integer',
         ]);
 
         Produk::create([
             'nama_produk' => $request->nama_produk,
+            'kategori_id' => $request->kategori_id,
             'harga'       => $request->harga,
             'stok'        => $request->stok,
         ]);
