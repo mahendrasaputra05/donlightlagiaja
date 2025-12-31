@@ -13,7 +13,7 @@ class ProdukController extends Controller
     // TAMPILKAN LIST PRODUK
     public function index()
     {
-        $produks = Produk::all();
+        $produks = Produk::with('kategori')->get();
         return view('admin.produk.index', compact('produks'));
     }
 

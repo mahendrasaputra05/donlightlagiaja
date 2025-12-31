@@ -11,6 +11,7 @@
         <th>Nama</th>
         <th>Harga</th>
         <th>Stok</th>
+        <th>Kategori</th>
         <th>Aksi</th>
     </tr>
 
@@ -19,6 +20,7 @@
         <td>{{ $produk->nama_produk }}</td>
         <td>{{ $produk->harga }}</td>
         <td>{{ $produk->stok }}</td>
+        <td>{{ $produk->kategori->nama_kategori }}</td>
         <td>
             <a href="{{ route('admin.produk.edit', $produk) }}">Edit</a>
 
